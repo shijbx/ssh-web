@@ -1,0 +1,35 @@
+{
+  "name": "xbb-ssh",
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview"
+  },
+  "dependencies": {
+    "@element-plus/icons": "^0.0.11",
+    "@tinymce/tinymce-vue": "^5.0.0",
+    "@vueuse/core": "^9.1.0",
+    "axios": "^0.27.2",
+    "dayjs": "^1.11.5",
+    "element-plus": "^2.2.14",
+    "file-saver": "^2.0.5",
+    "ismobilejs": "^1.1.1",
+    "lodash-es": "^4.17.21",
+    "normalize.css": "^8.0.1",
+    "nprogress": "^0.2.0",
+    "qrcode.vue": "^3.3.3",
+    "qs": "^6.11.0",
+    "vue": "^3.2.37",
+    "vue-i18n": "^9.2.2",
+    "vue-router": "^4.1.4"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^3.0.3",
+    "sass": "^1.54.5",
+    "sass-loader": "^13.0.2",
+    "unplugin-auto-import": "^0.11.2",
+    "vite": "^3.0.9",
+    "vite-plugin-style-import": "^2.0.0"
+  }
+}

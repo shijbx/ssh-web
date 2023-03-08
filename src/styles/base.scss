@@ -1,0 +1,115 @@
+@font-face {
+  font-family: "Roboto-Medium";
+  src: url("/src/assets/fonts/Roboto-Medium.ttf");
+}
+@font-face {
+  font-family: "Roboto-Regular";
+  src: url("/src/assets/fonts/Roboto-Regular.ttf");
+}
+
+// .el-message {
+//   background: #7f7f7f;
+//   --el-message-text-color: #fff;
+// }
+.el-message__icon {
+  font-size: 24px;
+}
+
+.el-button--text {
+  text-decoration: underline;
+}
+
+.el-input {
+  width: 200px;
+}
+
+.el-message-box__input .el-input{
+  width: 100%;
+}
+
+.el-table .el-table__cell {
+  text-align: center;
+}
+
+.el-table .el-table__cell .cell {
+  word-break: break-word;
+}
+
+.el-table th.el-table__cell {
+  background: #ddeeff;
+}
+
+.el-date-editor--daterange {
+  width: 500px;
+  flex-grow: 0;
+}
+
+.float-right {
+  float: right;
+}
+
+@for $index from 0 through 6 {
+  $i: $index * 5;
+
+  .m-#{$i} {
+    margin: 1px * $i;
+  }
+
+  .mt-#{$i} {
+    margin-top: 1px * $i;
+  }
+
+  .mb-#{$i} {
+    margin-bottom: 1px * $i;
+  }
+
+  .ml-#{$i} {
+    margin-left: 1px * $i;
+  }
+
+  .mr-#{$i} {
+    margin-right: 1px * $i;
+  }
+
+  .mlr-#{$i} {
+    margin: 0 (1px * $i);
+  }
+
+  .mtb-#{$i} {
+    margin: (1px * $i) 0;
+  }
+
+  .p-#{$i} {
+    padding: 1px * $i;
+  }
+
+  .pt-#{$i} {
+    padding-top: 1px * $i;
+  }
+
+  .pb-#{$i} {
+    padding-bottom: 1px * $i;
+  }
+
+  .pl-#{$i} {
+    padding-left: 1px * $i;
+  }
+
+  .pr-#{$i} {
+    padding-right: 1px * $i;
+  }
+
+  .plr-#{$i} {
+    padding: 0 (1px * $i);
+  }
+
+  .ptb-#{$i} {
+    padding: (1px * $i) 0;
+  }
+
+  @if ($index > 0) {
+    .font-#{8 + 4*$index} {
+      font-size: 8px + 4 * $index;
+    }
+  }
+}

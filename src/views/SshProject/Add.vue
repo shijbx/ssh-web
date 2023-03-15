@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h3>新增项目</h3>
     <Detail :formData="formData" @save="save" @cancel="cancel"></Detail>
   </div>
 </template>
@@ -9,7 +8,6 @@
 import Detail from "./components/Detail.vue";
 import http from "@/utils/http";
 import { ElMessage } from "element-plus";
-import { defaultCity } from "@/store/useCityList";
 
 const router = useRouter();
 
@@ -18,10 +16,11 @@ const formData = ref({
   jarName: "",
   serverId: "",
   localPath: "",
-  targetPath: "",
-  shPath: "",
+  serverProjectPath: "",
+  build: "",
+  shText: "",
   gitUrl: "",
-  gitLocalPath: "",
+  gitPath: "",
   gitUser: "",
   gitPassword: "",
   gitSession: "",

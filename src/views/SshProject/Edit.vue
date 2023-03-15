@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h3>修改项目</h3>
     <Detail :formData="formData" @save="save" @cancel="cancel"></Detail>
   </div>
 </template>
@@ -18,13 +17,16 @@ const getDetail = () => {
   http.get(`/ssh/serverProject/getInfo/${route.params.id}`).then((res) => {
     formData.value = {
       projectId: res.data.projectId,
+      serverId: res.data.serverId,
       projectName: res.data.projectName,
       localPath: res.data.localPath,
-      targetPath: res.data.targetPath,
+      serverProjectPath: res.data.serverProjectPath,
       jarName: res.data.jarName,
+      build: res.data.build,
       serverName: res.data.serverName,
+      shText: res.data.shText,
       gitUrl: res.data.gitUrl,
-      gitLocalPath: res.data.gitLocalPath,
+      gitPath: res.data.gitPath,
       gitUser: res.data.gitUser,
       gitPassword: res.data.gitPassword,
       gitSession: res.data.gitSession,
@@ -33,10 +35,10 @@ const getDetail = () => {
   });
 };
 getDetail();
-
 const save = () => {
   http.post("/ssh/serverProject/update", formData.value).then((res) => {
     ElMessage.success("更新成功!");
+    router.back();
   });
 };
 const cancel = () => {

@@ -14,7 +14,7 @@
         <el-input v-model="formData.userName"></el-input>
       </el-form-item>
       <el-form-item label="登录密码:" prop="userPassword">
-        <el-input v-model="formData.userPassword"></el-input>
+        <el-input v-model="formData.userPassword" show-password></el-input>
       </el-form-item>
       <el-form-item label="备注:" prop="remark">
         <el-input v-model="formData.remark" type="textarea"></el-input>

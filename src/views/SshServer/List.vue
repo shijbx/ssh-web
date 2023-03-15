@@ -38,7 +38,7 @@
 
       <el-table-column label="操作" prop="actions" width="220px">
         <template #default="{ row }">
-          <el-button type="primary" size="small" color="#00a854" @click="connectionTest(row)">连接测试</el-button>
+          <el-button type="danger" size="small" color="#00a854" @click.native="connectionTest(row)">连接测试</el-button>
           <el-button type="primary" size="small" @click="handleEdit(row)">修改</el-button>
           <el-button type="danger" size="small" color="#f31a1a" @click="handleDelete(row)">删除</el-button>
         </template>
@@ -82,8 +82,8 @@ const handleEdit = (row) => { router.push({name: "editServer", params: {id: row.
 
 const connectionTest = (row) => {
 
-  http.get(`/ssh/server/connectionTest/${route.params.id}`).then((res) => {
-    ElMessage.success(res.data);
+  http.get(`/ssh/server/connectionTest/${row.serverId}`).then((res) => {
+    ElMessage.success(res.msg);
   });
 
 };

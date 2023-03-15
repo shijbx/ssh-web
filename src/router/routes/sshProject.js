@@ -1,12 +1,12 @@
 import Layout from "@/components/Layout/index.vue";
-import {Setting} from "@element-plus/icons";
+import {Operation} from "@element-plus/icons";
 import {shallowRef} from "vue";
 
 export default {
     path: "/sshProject",
     redirect: "/sshProject/list",
     component: Layout,
-    meta: {title: "项目管理", icon: shallowRef(Setting)},
+    meta: {title: "项目管理", icon: shallowRef(Operation)},
     children: [
         {
             path: "/sshProject/list",

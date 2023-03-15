@@ -1,13 +1,18 @@
 <template>
 
   <div>
-    <el-form inline class="mb-20" :model="formData" :rules="formRules" label-position="left" ref="formRef">
-      <br/>
+    <div><h4>基础配置</h4></div>
+    <el-form inline :model="formData" :rules="formRules" label-position="left" ref="formRef">
       <el-form-item label="项目名称:">
-        <el-input v-model="formData.projectName" ></el-input>
+        <el-input v-model="formData.projectName" style=width:165px></el-input>
       </el-form-item>
-      <el-form-item label="服务器名称:">
-        <el-input v-model="formData.serverId" ></el-input>
+      <el-form-item label="服务器名称:" prop="endCityId">
+        <el-cascader
+            v-model="formData.serverId"
+            :options="sList"
+            :props="{ emitPath: false }"
+            filterable
+        ></el-cascader>
       </el-form-item>
     </el-form>
   </div>
@@ -15,44 +20,52 @@
   <div>
     <el-form class="mb-20" :model="formData" :rules="formRules" label-position="left" ref="formRef">
 
-
-      <el-form-item label="git地址:" prop="gitUrl">
-        <el-input v-model="formData.gitUrl" type="textarea"></el-input>
-      </el-form-item>
-      <el-form-item label="git项目路径:" prop="gitLocalPath">
-        <el-input v-model="formData.gitLocalPath" type="textarea"></el-input>
-      </el-form-item>
-      <el-form-item label="git账号:" prop="gitUser">
-        <el-input v-model="formData.gitUser" type="textarea"></el-input>
-      </el-form-item>
-      <el-form-item label="git密码:" prop="gitPassword">
-        <el-input v-model="formData.gitPassword" type="textarea"></el-input>
-      </el-form-item>
-      <el-form-item label="git秘钥:" prop="gitSession">
-        <el-input v-model="formData.gitSession" type="textarea"></el-input>
-      </el-form-item>
-      <el-form-item label="本地路径:" prop="localPath">
-        <el-input v-model="formData.localPath" type="textarea"></el-input>
+      <el-form-item label="项目路径:" prop="serverProjectPath">
+        <el-input v-model="formData.serverProjectPath" style=width:400px></el-input>
       </el-form-item>
       <el-form-item label="jar包名称:" prop="jarName">
-        <el-input v-model="formData.jarName" ></el-input>
+        <el-input v-model="formData.jarName" style=width:400px></el-input>
       </el-form-item>
-      <el-form-item label="目标路径:" prop="targetPath">
-        <el-input v-model="formData.targetPath" type="textarea"></el-input>
+      <br/>
+      <div><h4>构建环境</h4></div>
+      <el-form-item label="打包命令:" prop="build">
+        <el-input v-model="formData.build" style=width:400px></el-input>
       </el-form-item>
-      <el-form-item prop="isValid">
-        <span class="mr-10">状态:</span>
-        <el-switch v-model="formData.isValid" :active-value="1" :inactive-value="0"></el-switch>
+      <br/>
+      <div><h4>源码管理</h4></div>
+      <el-form-item label="git地址:" prop="gitUrl">
+        <el-input v-model="formData.gitUrl" style=width:400px></el-input>
       </el-form-item>
-    </el-form>
+      <el-form-item label="服务器上git路径:" prop="gitPath">
+        <el-input v-model="formData.gitPath" style=width:400px></el-input>
+      </el-form-item>
+      <div>
+        <el-form inline   :model="formData" :rules="formRules" label-position="left" ref="formRef">
+          <el-form-item label="git账号:" prop="gitUser">
+            <el-input v-model="formData.gitUser" style=width:185px></el-input>
+          </el-form-item>
+          <el-form-item label="git密码:" prop="gitPassword">
+            <el-input v-model="formData.gitPassword" show-password style=width:185px></el-input>
+          </el-form-item>
+        </el-form>
+      </div>
+      <div><h4>执行 shell</h4></div>
+      <el-form-item label="命令:" prop="shText">
+        <el-input v-model="formData.shText" type="textarea" style=width:400px :rows="6"></el-input>
+      </el-form-item>
 
+    <el-form-item prop="isValid">
+      <span class="mr-10">状态:</span>
+      <el-switch v-model="formData.isValid" :active-value="1" :inactive-value="0"></el-switch>
+    </el-form-item>
+    </el-form>
     <el-button type="primary" @click="save">保存</el-button>
     <el-button type="primary" @click="cancel">取消</el-button>
   </div>
 </template>
 
 <script setup>
-import useCityList from "@/store/useCityList";
+import serverList from "@/store/serverList";
 
 const props = defineProps({
   formData: {
@@ -62,17 +75,17 @@ const props = defineProps({
 });
 const emit = defineEmits(["save", "cancel"]);
 
-const cityList = useCityList();
+const sList = serverList();
 const formRules = ref({
-  projectName: [{ required: true, message: "请输入项目名称", trigger: "blur" }],
-  serverId: [{ required: true, message: "请选择服务器", trigger: "blur" }],
-  gitUrl: [{ required: true, message: "请输入git地址", trigger: "blur" }],
-  gitLocalPath: [{ required: true, message: "请输入git项目路径", trigger: "blur" }],
-  gitUser: [{ required: true, message: "请输入git账号", trigger: "blur" }],
-  gitPassword: [{ required: true, message: "请输入git密码", trigger: "blur" }],
-  localPath: [{ required: true, message: "请输入本地路径", trigger: "blur" }],
-  targetPath: [{ required: true, message: "请输入目标路径", trigger: "blur" }],
-  jarName: [{ required: true, message: "请输入jar包名称", trigger: "blur" }],
+  projectName: [{required: true, message: "请输入项目名称", trigger: "blur"}],
+  serverId: [{required: true, message: "请选择服务器", trigger: "blur"}],
+  gitUrl: [{required: true, message: "请输入git地址", trigger: "blur"}],
+  gitPath: [{required: true, message: "服务器上的git路径", trigger: "blur"}],
+  gitUser: [{required: true, message: "请输入git账号", trigger: "blur"}],
+  gitPassword: [{required: true, message: "请输入git密码", trigger: "blur"}],
+  localPath: [{required: true, message: "请输入本地路径", trigger: "blur"}],
+  serverProjectPath: [{required: true, message: "请输入目标路径", trigger: "blur"}],
+  jarName: [{required: true, message: "请输入jar包名称", trigger: "blur"}],
 });
 const formRef = ref("formRef");
 

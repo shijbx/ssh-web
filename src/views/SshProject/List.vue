@@ -26,16 +26,26 @@
       <el-table-column label="项目名称" prop="projectName"></el-table-column>
       <el-table-column label="服务器名称" prop="serverName"></el-table-column>
       <el-table-column label="服务器ip" prop="host"></el-table-column>
-      <el-table-column label="本地路径" prop="localPath"></el-table-column>
-      <el-table-column label="目标路径" prop="targetPath"></el-table-column>
+      <el-table-column label="服务器项目地址" prop="serverProjectPath"></el-table-column>
+      <el-table-column label="服务器git项目地址" prop="serverProjectPath"></el-table-column>
       <el-table-column label="jar名称" prop="jarName"></el-table-column>
-      <el-table-column label="状态" prop="status">
+      <el-table-column label="状态" prop="isValid">
         <template #default="{ row }">
-          <span v-if="row.status" class="normal">● 在线</span>
-          <span v-else class="suspend">● 离线</span>
+          <span v-if="row.isValid == 1" class="normal">启用</span>
+          <span v-else class="suspend">禁用</span>
         </template>
       </el-table-column>
-
+      <el-table-column label="选择分支" prop="gitBranch">
+        <el-cascader
+            v-model="gitBranch"
+            :options="sList"
+            :props="{ emitPath: false }"
+            filterable
+        ></el-cascader>
+      </el-table-column>
+      <el-table-column label="aaaaaa" prop="gitBranch">
+        <el-cascader :props="props" multiple  v-model="value"></el-cascader>
+      </el-table-column>
       <el-table-column label="操作" prop="actions" width="220px">
         <template #default="{ row }">
           <el-button type="success" color="#00a854" size="small" @click="sendPackage(row)">发包</el-button>
@@ -58,7 +68,9 @@
 <script setup>
 import {ElMessage, ElMessageBox} from "element-plus";
 import http from "@/utils/http";
+import serverList from "@/store/serverList";
 
+const sList = serverList();
 const router = useRouter();
 const searchForm = ref({
   serverName: null,
@@ -86,6 +98,37 @@ const postList = () => {
       });
 };
 postList();
+
+const buslineOptions = ref([]);
+const subBuslineOptions = computed(() => {
+  searchForm.value.subBuslineId = null;
+  return buslineOptions.value.find((o) => o.value === searchForm.value.buslineId)?.subList ?? [];
+});
+
+const getSublineList = () => {
+  http.get("/ssh/serverProject/queryGitBranchList").then((res) => {
+    buslineOptions.value = [
+      { value: null, label: "All", subList: [{ value: null, label: "All" }] },
+      ...(res.t ?? []).map((o) => ({
+        value: o.buslineId,
+        label: o.buslineName,
+        subList: [
+          { value: null, label: "All" },
+          ...o.busList.map((o) => ({ value: o.subBuslineId, label: o.subBuslineName })),
+        ],
+      })),
+    ];
+  });
+
+  // http.get("/operate/busOperateBuslineBus/queryList").then((res) => {
+  //   buslineOptions.value = [
+  //     { value: null, label: "All" },
+  //     ...(res.t ?? []).map((o) => ({ value: o.subBuslineId, label: o.subBuslineName })),
+  //   ];
+  // });
+};
+getSublineList();
+
 watch(
     () => page.value.index,
     (newVal, oldVal) => {
@@ -104,15 +147,10 @@ const create = () => router.push({name: "addProject"});
 
 const sendPackage = (row) => {
 
-  ElMessageBox.alert("", {
-    title: "你TM的要想清楚？",
-    type: "error",
-    center: true,
-  })
+  ElMessageBox.confirm('Are you sure to close this dialog?')
+
       .then((res) => {
-        http.post("/ssh/serverProject/delete1", {id: row.projectId}).then((res) => {
-          ElMessage.success("删除成功!");
-          postList();
+        http.post("/ssh/serverProject/sendPackage", {projectId: row.projectId, gitBranch: row.gitBranch}).then((res) => {
         });
       })
       .catch((err) => {

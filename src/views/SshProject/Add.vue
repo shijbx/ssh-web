@@ -17,6 +17,7 @@ const formData = ref({
   serverId: "",
   localPath: "",
   serverProjectPath: "",
+  buildType: "",
   build: "",
   shText: "",
   gitUrl: "",

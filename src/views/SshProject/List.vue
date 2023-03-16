@@ -26,27 +26,30 @@
       <el-table-column label="项目名称" prop="projectName"></el-table-column>
       <el-table-column label="服务器名称" prop="serverName"></el-table-column>
       <el-table-column label="服务器ip" prop="host"></el-table-column>
-      <el-table-column label="服务器项目地址" prop="serverProjectPath"></el-table-column>
-      <el-table-column label="服务器git项目地址" prop="serverProjectPath"></el-table-column>
-      <el-table-column label="jar名称" prop="jarName"></el-table-column>
       <el-table-column label="状态" prop="isValid">
         <template #default="{ row }">
           <span v-if="row.isValid == 1" class="normal">启用</span>
           <span v-else class="suspend">禁用</span>
         </template>
       </el-table-column>
+      <el-table-column label="最后打包时间" prop="lastTime"></el-table-column>
+      <!--
+       <el-table-column label="服务器项目地址" prop="serverProjectPath"></el-table-column>
+      <el-table-column label="服务器git项目地址" prop="serverProjectPath"></el-table-column>
+      <el-table-column label="jar名称" prop="jarName"></el-table-column>
+
+      -->
       <el-table-column label="选择分支" prop="gitBranch">
-        <el-cascader
-            v-model="gitBranch"
-            :options="sList"
-            :props="{ emitPath: false }"
-            filterable
-        ></el-cascader>
+        <template #default="{row}">
+          <el-select
+              v-model="row.gitBranch"
+              @visible-change="(visible)=>visibleChange(row, visible)"
+          >
+            <el-option v-for="item in branchList" :key="item" :value="item" :label="item"></el-option>
+          </el-select>
+        </template>
       </el-table-column>
-      <el-table-column label="aaaaaa" prop="gitBranch">
-        <el-cascader :props="props" multiple  v-model="value"></el-cascader>
-      </el-table-column>
-      <el-table-column label="操作" prop="actions" width="220px">
+      <el-table-column label="操作" prop="actions" width="200px">
         <template #default="{ row }">
           <el-button type="success" color="#00a854" size="small" @click="sendPackage(row)">发包</el-button>
           <el-button type="primary" size="small" @click="handleEdit(row)">修改</el-button>
@@ -62,22 +65,27 @@
         layout="total, prev, pager, next, jumper"
     >
     </el-pagination>
+
+    <el-dialog v-model="dialog.visible">
+      <p v-for="(text, index) in dialog.text" :key="index" v-text="text" style="white-space: pre-wrap;"></p>
+    </el-dialog>
   </div>
 </template>
 
 <script setup>
 import {ElMessage, ElMessageBox} from "element-plus";
 import http from "@/utils/http";
-import serverList from "@/store/serverList";
 
-const sList = serverList();
+const branchList = ref([]);
 const router = useRouter();
 const searchForm = ref({
   serverName: null,
   projectName: null,
   isActive: null,
 });
-
+const dialog = ref({
+  Visible: false
+})
 const tableData = ref([]);
 const page = ref({
   index: 1,
@@ -95,39 +103,26 @@ const postList = () => {
       .then((res) => {
         tableData.value = res.data.records ?? [];
         page.value.total = res.data.total || 0;
+      })
+      .catch((err) => {
+        ElMessage.success(err.message);
       });
+
 };
 postList();
 
-const buslineOptions = ref([]);
-const subBuslineOptions = computed(() => {
-  searchForm.value.subBuslineId = null;
-  return buslineOptions.value.find((o) => o.value === searchForm.value.buslineId)?.subList ?? [];
-});
-
-const getSublineList = () => {
-  http.get("/ssh/serverProject/queryGitBranchList").then((res) => {
-    buslineOptions.value = [
-      { value: null, label: "All", subList: [{ value: null, label: "All" }] },
-      ...(res.t ?? []).map((o) => ({
-        value: o.buslineId,
-        label: o.buslineName,
-        subList: [
-          { value: null, label: "All" },
-          ...o.busList.map((o) => ({ value: o.subBuslineId, label: o.subBuslineName })),
-        ],
-      })),
-    ];
+const getBranchList = (id) => {
+  if (!id) return
+  http.get("/ssh/serverProject/queryGitBranchList/" + id).then((res) => {
+    branchList.value = res.data
   });
+}
 
-  // http.get("/operate/busOperateBuslineBus/queryList").then((res) => {
-  //   buslineOptions.value = [
-  //     { value: null, label: "All" },
-  //     ...(res.t ?? []).map((o) => ({ value: o.subBuslineId, label: o.subBuslineName })),
-  //   ];
-  // });
-};
-getSublineList();
+const visibleChange = (row, visible) => {
+  if (visible) {
+    getBranchList(row.projectId)
+  }
+}
 
 watch(
     () => page.value.index,
@@ -146,15 +141,13 @@ const search = () => {
 const create = () => router.push({name: "addProject"});
 
 const sendPackage = (row) => {
-
-  ElMessageBox.confirm('Are you sure to close this dialog?')
-
-      .then((res) => {
-        http.post("/ssh/serverProject/sendPackage", {projectId: row.projectId, gitBranch: row.gitBranch}).then((res) => {
-        });
-      })
-      .catch((err) => {
-      });
+  http.post("/ssh/serverProject/sendPackage", {projectId: row.projectId, gitBranch: row.gitBranch}).then((res) => {
+    dialog.value = {
+      visible: true,
+      text: res.data
+    }
+  });
+  postList();
 };
 
 const handleEdit = (row) => {

@@ -9,7 +9,6 @@
 import Detail from "./components/Detail.vue";
 import http from "@/utils/http";
 import { ElMessage } from "element-plus";
-import { defaultCity } from "@/store/useCityList";
 
 const router = useRouter();
 

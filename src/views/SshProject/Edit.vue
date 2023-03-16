@@ -22,6 +22,7 @@ const getDetail = () => {
       localPath: res.data.localPath,
       serverProjectPath: res.data.serverProjectPath,
       jarName: res.data.jarName,
+      buildType: res.data.buildType,
       build: res.data.build,
       serverName: res.data.serverName,
       shText: res.data.shText,

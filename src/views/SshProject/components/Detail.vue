@@ -1,24 +1,24 @@
 <template>
 
-  <div>
-    <div><h4>基础配置</h4></div>
-    <el-form inline :model="formData" :rules="formRules" label-position="left" ref="formRef">
-      <el-form-item label="项目名称:">
-        <el-input v-model="formData.projectName" style=width:165px></el-input>
-      </el-form-item>
-      <el-form-item label="服务器名称:" prop="endCityId">
-        <el-cascader
-            v-model="formData.serverId"
-            :options="sList"
-            :props="{ emitPath: false }"
-            filterable
-        ></el-cascader>
-      </el-form-item>
-    </el-form>
-  </div>
 
+  <div><h4>基础配置</h4></div>
   <div>
     <el-form class="mb-20" :model="formData" :rules="formRules" label-position="left" ref="formRef">
+
+      <div style="display: flex">
+        <el-form-item label="项目名称:" prop="projectName">
+          <el-input v-model="formData.projectName"></el-input>
+        </el-form-item>
+
+        <el-form-item label="服务器名称:" prop="serverId">
+          <el-cascader
+              v-model="formData.serverId"
+              :options="sList"
+              :props="{ emitPath: false }"
+              filterable
+          ></el-cascader>
+        </el-form-item>
+      </div>
 
       <el-form-item label="项目路径:" prop="serverProjectPath">
         <el-input v-model="formData.serverProjectPath" style=width:400px></el-input>
@@ -28,6 +28,12 @@
       </el-form-item>
       <br/>
       <div><h4>构建环境</h4></div>
+      <div class="mb-2 flex items-center text-sm">
+        <el-radio-group v-model="formData.buildType" prop="buildType" label="打包方式:">
+          <el-radio :label="1" size="large">Maven</el-radio>
+          <el-radio :label="2" size="large">Gradle</el-radio>
+        </el-radio-group>
+      </div>
       <el-form-item label="打包命令:" prop="build">
         <el-input v-model="formData.build" style=width:400px></el-input>
       </el-form-item>
@@ -39,25 +45,23 @@
       <el-form-item label="服务器上git路径:" prop="gitPath">
         <el-input v-model="formData.gitPath" style=width:400px></el-input>
       </el-form-item>
-      <div>
-        <el-form inline   :model="formData" :rules="formRules" label-position="left" ref="formRef">
-          <el-form-item label="git账号:" prop="gitUser">
-            <el-input v-model="formData.gitUser" style=width:185px></el-input>
-          </el-form-item>
-          <el-form-item label="git密码:" prop="gitPassword">
-            <el-input v-model="formData.gitPassword" show-password style=width:185px></el-input>
-          </el-form-item>
-        </el-form>
+      <div style="display: flex">
+        <el-form-item label="git账号:" prop="gitUser">
+          <el-input v-model="formData.gitUser"></el-input>
+        </el-form-item>
+        <el-form-item label="git密码:" prop="gitPassword">
+          <el-input v-model="formData.gitPassword" show-password></el-input>
+        </el-form-item>
       </div>
       <div><h4>执行 shell</h4></div>
       <el-form-item label="命令:" prop="shText">
         <el-input v-model="formData.shText" type="textarea" style=width:400px :rows="6"></el-input>
       </el-form-item>
 
-    <el-form-item prop="isValid">
-      <span class="mr-10">状态:</span>
-      <el-switch v-model="formData.isValid" :active-value="1" :inactive-value="0"></el-switch>
-    </el-form-item>
+      <el-form-item prop="isValid">
+        <span class="mr-10">状态:</span>
+        <el-switch v-model="formData.isValid" :active-value="1" :inactive-value="0"></el-switch>
+      </el-form-item>
     </el-form>
     <el-button type="primary" @click="save">保存</el-button>
     <el-button type="primary" @click="cancel">取消</el-button>
@@ -74,7 +78,6 @@ const props = defineProps({
   },
 });
 const emit = defineEmits(["save", "cancel"]);
-
 const sList = serverList();
 const formRules = ref({
   projectName: [{required: true, message: "请输入项目名称", trigger: "blur"}],
@@ -86,6 +89,7 @@ const formRules = ref({
   localPath: [{required: true, message: "请输入本地路径", trigger: "blur"}],
   serverProjectPath: [{required: true, message: "请输入目标路径", trigger: "blur"}],
   jarName: [{required: true, message: "请输入jar包名称", trigger: "blur"}],
+  buildType: [{required: true, message: "请选择打包方式", trigger: "blur"}],
 });
 const formRef = ref("formRef");
 

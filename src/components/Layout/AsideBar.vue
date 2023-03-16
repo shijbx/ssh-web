@@ -1,7 +1,10 @@
 <template>
   <div>
     <div class="logo">
-      <img src="/src/assets/logo.png" alt="" />
+      <h1>  </h1>
+      <h1>  </h1>
+      <h1>  </h1>
+<!--      <img src="/src/assets/logo.png" alt="" />-->
     </div>
 
     <el-menu

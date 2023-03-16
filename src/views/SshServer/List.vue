@@ -101,6 +101,7 @@ const handleDelete = (row) => {
         });
       })
       .catch((err) => {
+        ElMessage.success(err.message);
       });
 };
 </script>

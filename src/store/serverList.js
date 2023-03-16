@@ -20,7 +20,7 @@ const defaultServer = computed(() => {
 
 export default () => {
   if (!serverList.value) {
-    http.get("/ssh/serverProject/queryList").then((res) => {
+    http.get("/ssh/serverProject/queryList?isValid=1").then((res) => {
       setServerList(res.data);
     });
   }

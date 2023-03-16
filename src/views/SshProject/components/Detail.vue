@@ -30,6 +30,7 @@
       <div><h4>构建环境</h4></div>
       <div class="mb-2 flex items-center text-sm">
         <el-radio-group v-model="formData.buildType" prop="buildType" label="打包方式:">
+          <el-radio :label="0" size="large">无</el-radio>
           <el-radio :label="1" size="large">Maven</el-radio>
           <el-radio :label="2" size="large">Gradle</el-radio>
         </el-radio-group>
@@ -43,7 +44,7 @@
         <el-input v-model="formData.gitUrl" style=width:400px></el-input>
       </el-form-item>
       <el-form-item label="服务器上git路径:" prop="gitPath">
-        <el-input v-model="formData.gitPath" style=width:400px></el-input>
+        <el-input placeholder="/home/git/xxxxx" v-model="formData.gitPath" style=width:400px></el-input>
       </el-form-item>
       <div style="display: flex">
         <el-form-item label="git账号:" prop="gitUser">
@@ -87,9 +88,6 @@ const formRules = ref({
   gitUser: [{required: true, message: "请输入git账号", trigger: "blur"}],
   gitPassword: [{required: true, message: "请输入git密码", trigger: "blur"}],
   localPath: [{required: true, message: "请输入本地路径", trigger: "blur"}],
-  serverProjectPath: [{required: true, message: "请输入目标路径", trigger: "blur"}],
-  jarName: [{required: true, message: "请输入jar包名称", trigger: "blur"}],
-  buildType: [{required: true, message: "请选择打包方式", trigger: "blur"}],
 });
 const formRef = ref("formRef");
 
@@ -101,6 +99,7 @@ const save = () => {
   });
 };
 const cancel = () => emit("cancel");
+
 </script>
 
 <style lang="scss" scoped>

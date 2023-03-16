@@ -17,7 +17,7 @@ const formData = ref({
   serverId: "",
   localPath: "",
   serverProjectPath: "",
-  buildType: "",
+  buildType: 0,
   build: "",
   shText: "",
   gitUrl: "",
@@ -25,7 +25,7 @@ const formData = ref({
   gitUser: "",
   gitPassword: "",
   gitSession: "",
-  isActive: 1,
+  isValid: 1,
 });
 
 const save = () => {

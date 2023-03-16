@@ -141,6 +141,9 @@ const search = () => {
 const create = () => router.push({name: "addProject"});
 
 const sendPackage = (row) => {
+  http.post("/ssh/serverProject/update", {projectId: row.projectId, gitBranch: row.gitBranch}).then((res) => {
+  });
+  postList();
   http.post("/ssh/serverProject/sendPackage", {projectId: row.projectId, gitBranch: row.gitBranch}).then((res) => {
     dialog.value = {
       visible: true,
